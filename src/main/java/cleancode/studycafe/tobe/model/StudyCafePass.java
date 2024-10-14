@@ -1,11 +1,14 @@
 package cleancode.studycafe.tobe.model;
 
+import java.util.Set;
+
 public class StudyCafePass {
 
     private final StudyCafePassType passType;
     private final int duration;
     private final int price;
     private final double discountRate;
+    private static final Set<StudyCafePassType> LOCKER_TYPES = Set.of(StudyCafePassType.FIXED);
 
     private StudyCafePass(StudyCafePassType passType, int duration, int price, double discountRate) {
         this.passType = passType;
@@ -16,6 +19,18 @@ public class StudyCafePass {
 
     public static StudyCafePass of(StudyCafePassType passType, int duration, int price, double discountRate) {
         return new StudyCafePass(passType, duration, price, discountRate);
+    }
+
+    public boolean isSamePassType(StudyCafePassType passType) {
+        return this.passType == passType;
+    }
+
+    public boolean isSameDurationType(StudyCafeLockerPass lockerPass) {
+        return lockerPass.isSamePassType(passType) && lockerPass.isSameDuration(duration);
+    }
+
+    public boolean cannotUseLocker() {
+        return passType.isNotLockerType();
     }
 
     public StudyCafePassType getPassType() {
@@ -46,5 +61,4 @@ public class StudyCafePass {
         }
         return "";
     }
-
 }
